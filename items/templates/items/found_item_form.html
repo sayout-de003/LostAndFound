@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Found Item</title>
+</head>
+<body>
+    <h2>Report a Found Item</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+    
+        <label>
+            <input type="checkbox" id="use_gps" name="use_gps" onchange="toggleLocationInput()">
+            Use My Current Location
+        </label>
+    
+        <input type="text" id="manual_location" name="location" placeholder="Enter location manually">
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+    
+        <button type="submit">Submit</button>
+    </form>
+    
+    <script>
+    function toggleLocationInput() {
+        var useGPS = document.getElementById("use_gps").checked;
+        var manualInput = document.getElementById("manual_location");
+    
+        if (useGPS) {
+            manualInput.disabled = true;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        document.getElementById("latitude").value = position.coords.latitude;
+                        document.getElementById("longitude").value = position.coords.longitude;
+                    },
+                    function(error) {
+                        alert("Error fetching location. Please enter manually.");
+                        document.getElementById("use_gps").checked = false;
+                        manualInput.disabled = false;
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+                document.getElementById("use_gps").checked = false;
+                manualInput.disabled = false;
+            }
+        } else {
+            manualInput.disabled = false;
+        }
+    }
+    </script>
+    
+</body>
+</html>
