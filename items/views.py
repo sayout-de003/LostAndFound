@@ -62,7 +62,7 @@ def found_item_page(request):
             return JsonResponse({"message": "Found item submitted", "item_id": found_item.id})
     else:
         form = FoundItemForm()
-    return render(request, "found_item_form.html", {"form": form})
+    return render(request, "items/found_item_form.html", {"form": form})
 
 
 def match_item_page(request):
